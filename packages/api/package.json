@@ -1,0 +1,33 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "pawanmkr",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc && nodemon dist/index.js",
+    "prod": "node dist/index.js",
+    "watch": "npx tsc --watch",
+    "dev:start": "docker compose up -d && pnpm install && pnpm run dev",
+    "prod:start": "pnpm install && pnpm run build && pnpm run prod"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.3.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/mongoose": "^5.11.97",
+    "@types/morgan": "^1.9.4",
+    "@types/node": "^20.3.3",
+    "nodemon": "^2.0.22"
+  }
+}

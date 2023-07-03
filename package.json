@@ -3,7 +3,20 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build-api": "pnpm --filter api build",
+    "build-web": "pnpm --filter web build",
+    "build": "pnpm run build-api && pnpm run build-web",  
+    "build:dev": "pnpm run build && pnpm --filter api dev",
+    "dev": "pnpm --filter api dev",
+    "watch": "pnpm --filter api watch",
+
+    "prod": "node dist/app.js",
+    "dev:start": "docker compose up -d && pnpm install && pnpm run dev",
+    "prod:start": "pnpm install && pnpm run build && pnpm run prod"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "tsx": "^3.12.7",
+    "typescript": "^5.0.2"
+  }
 }
