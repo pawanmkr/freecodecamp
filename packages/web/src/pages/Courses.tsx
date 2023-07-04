@@ -37,6 +37,11 @@ const Courses = () => {
           })
           .then((result) => {
             setCourses(result.data);
+          })
+          .catch((err) => {
+            if (err.response.status === 403) {
+              throw new Error(err.response.data.error);
+            }
           });
       } catch (error) {
         throw new Error("Failed to fetch courses from server");

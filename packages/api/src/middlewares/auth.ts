@@ -4,10 +4,10 @@ import jwt from 'jsonwebtoken';
 import path from 'path';
 
 dotenv.config({
-  path: path.join(process.cwd(), '.env')
+  path: path.join(process.cwd(), "../../.env")
 });
 
-const jwtSecret: string = process.env.JWT_SECRET || '';
+const jwtSecret: string = process.env.JWT_SECRET_KEY || '';
 if (!jwtSecret) {
   throw new Error("Unable to retrieve JWT Secret Key from env");
 }
@@ -24,9 +24,11 @@ export default async function authorization(req: AuthenticatedRequest, res: Resp
     jwt.verify(token, jwtSecret, (err: any, user: any) => {
       if (err) {
         console.error(err);
-        return res.status(403).json({ error: 'Failed to authenticate token.' });
+        return res.status(403).json({ error: 'Authentication Failed JWT has been tampered' });
       }
       req.user = user;
+      console.log("user verified");
+      
       next();
     });
   } else {
