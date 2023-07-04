@@ -19,7 +19,6 @@ import { useGoogleLogin } from "@react-oauth/google";
 import googleIcon from "../assets/google.png";
 
 const SignIn = ({ BASE_URI, logoPath }: BaseURI) => {
-  const GOOGLE_CLIENT_ID: string = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const navigate = useNavigate();
   const signInEndpoint = `${BASE_URI}/api/v1/user/signin`;
   const [emailExists, setEmailExists] = useState(false);

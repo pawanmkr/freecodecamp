@@ -1,8 +1,15 @@
+import { useEffect } from "react";
 import Navbar from "../components/navbar";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
+  const jwt: string | null = localStorage.getItem("jwt");
+  useEffect(() => {
+    if (jwt) {
+      navigate("/courses");
+    }
+  }, [jwt, navigate]);
   return (
     <div className="homepage flex flex-col items-center bg-gray-200 h-[100vh]">
       <Navbar />

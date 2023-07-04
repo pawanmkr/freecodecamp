@@ -2,11 +2,20 @@ import SignIn from "../components/signin";
 import fccLogo from "../assets/fcclogo.png";
 import fccSmall from "../assets/fcc-small.svg";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const BASE_URI: string = import.meta.env.VITE_BASE_URI;
 const CLIENT_ID: string = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 const SignInPage = () => {
+  const navigate = useNavigate();
+  const jwt: string | null = localStorage.getItem("jwt");
+  useEffect(() => {
+    if (jwt) {
+      navigate("/courses");
+    }
+  }, [jwt, navigate]);
   return (
     <GoogleOAuthProvider clientId={CLIENT_ID}>
       <div className="flex flex-col items-center bg-gray-200 h-[100vh]">
