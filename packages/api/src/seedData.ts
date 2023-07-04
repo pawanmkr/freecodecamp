@@ -43,7 +43,7 @@ export const courses: CourseItem[] = [
 export async function preSeeding() {
   Course.find().then(async (docs) => {
     if (docs.length > 10) {
-      console.log("Database is Already Seeded\nReturning...");
+      console.log("Database is Already Seeded\nReturning...\n");
       return;
     }
     for (let course of courses) {
@@ -57,6 +57,6 @@ export async function preSeeding() {
           throw new Error("Seeding was failed!");  
         });
     }
-    console.log("Seeding Successful");
+    console.log("Seeding Successful\n");
   })
 }

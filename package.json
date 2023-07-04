@@ -2,19 +2,17 @@
   "name": "freecodecamp",
   "version": "1.0.0",
   "main": "index.js",
+  "license": "MIT",
   "scripts": {
     "build-api": "pnpm --filter api build",
     "build-web": "pnpm --filter web build",
-    "build": "pnpm run build-api && pnpm run build-web",  
+    "build": "pnpm install && pnpm run build-api",  
     "build:dev": "pnpm run build && pnpm --filter api dev",
+    "clean": "rm pnpm-lock.yaml && rm -rf node_modules && rm -rf packages/api/node_modules && rm -rf packages/api/dist && clear",
     "dev": "pnpm --filter api dev",
     "watch": "pnpm --filter api watch",
-
-    "prod": "node dist/app.js",
-    "dev:start": "docker compose up -d && pnpm install && pnpm run dev",
-    "prod:start": "pnpm install && pnpm run build && pnpm run prod"
+    "prod": "pnpm --filter api prod"
   },
-  "license": "MIT",
   "devDependencies": {
     "tsx": "^3.12.7",
     "typescript": "^5.0.2"
