@@ -75,7 +75,7 @@ app.use('/api/v1', router);
 const server = app.listen(PORT, () => {
   let url: string = `http://localhost:${PORT}`;
   if (process.env.NODE_ENV === 'production') {
-    url = 'https://your-production-url.com';
+    url = 'https://fcc-lol8.onrender.com';
   }
   console.log(`\nServer running at ${url}`);
 });
