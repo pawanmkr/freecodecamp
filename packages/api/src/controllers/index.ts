@@ -1,2 +1,2 @@
-export * from './signin.js'
+export * from './authentication.js'
 export * from './course.js'

@@ -1,45 +1,17 @@
 import { Request, Response } from 'express';
+import { Course } from '../models/course.model.js';
 
 export async function getCourses(req: Request, res: Response) {
-  res.status(200).send(courses);
+  try {
+    Course.find().then((docs) => {
+      if (docs.length === 0) {
+        res.sendStatus(404);
+        return;
+      }
+      res.status(200).send(docs.slice(0, 8));
+    })
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500).send("Failed to fetch Courses from server");
+  }
 }
-
-type Course = {
-  id: string;
-  title: string;
-};
-
-const courses: Course[] = [
-  {
-    id: "3",
-    title: "Web Development with HTML, CSS, and JavaScript (30+ hours)",
-  },
-  {
-    id: "4",
-    title: "Data Structures and Algorithms in Python",
-  },
-  {
-    id: "5",
-    title: "Mobile App Development with React Native",
-  },
-  {
-    id: "6",
-    title: "Database Design and Management with SQL",
-  },
-  {
-    id: "7",
-    title: "Introduction to Artificial Intelligence",
-  },
-  {
-    id: "8",
-    title: "Go Full-Stack with MERN (MongoDB, Express, React, Node.js)",
-  },
-  {
-    id: "9",
-    title: "Cybersecurity Fundamentals and Best Practices",
-  },
-  {
-    id: "10",
-    title: "Cloud Computing and AWS Essentials",
-  },
-];

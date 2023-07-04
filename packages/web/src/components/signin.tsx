@@ -19,15 +19,24 @@ import { useGoogleLogin } from "@react-oauth/google";
 import googleIcon from "../assets/google.png";
 
 const SignIn = ({ BASE_URI, logoPath }: BaseURI) => {
+  const signinEndpoint = `${BASE_URI}/api/v1/user/signin`;
+  const signupEndpoint = `${BASE_URI}/api/v1/user/signup`;
+  const userInfoFromGoogleUrl = `${BASE_URI}/api/v1/user/signin/google`;
+
+  /*
+   * All the React Hooks
+   */
   const navigate = useNavigate();
-  const signInEndpoint = `${BASE_URI}/api/v1/user/signin`;
   const [emailExists, setEmailExists] = useState(false);
+  const [noUserExists, setNoUserExists] = useState(false);
+  const [isSignup, setIsSignup] = useState(true);
   const [values, setValues] = useState({
     fullname: "",
     email: "",
     password: "",
   });
 
+  // Input fields to render in From
   const inputs: InputFields[] = [
     {
       id: "1",
@@ -55,34 +64,61 @@ const SignIn = ({ BASE_URI, logoPath }: BaseURI) => {
     },
   ];
 
+  // updating form input values
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const signIn = async () => {
-    await axios
-      .post(signInEndpoint, {
-        fullName: values.fullname,
-        email: values.email,
-        password: values.password,
-      })
-      .then((response) => {
-        const token: string = response.data;
-        localStorage.setItem("jwt", token);
-        navigate("/courses");
-      })
-      .catch((err) => {
-        if (err.response.status === 409) {
-          setEmailExists(true);
-        }
-      });
+  /*
+   * Normal Signup/ Signin Method using form
+   */
+  const handleContinue = async () => {
+    if (!values.fullname) {
+      // If fullname is NULL, then do Login
+      await axios
+        .post(signinEndpoint, {
+          email: values.email,
+          password: values.password,
+        })
+        .then((response) => {
+          const token: string = response.data;
+          localStorage.setItem("jwt", token);
+          navigate("/courses");
+        })
+        .catch((err) => {
+          if (err.response.status === 404) {
+            setNoUserExists(true);
+          }
+        });
+    } else {
+      // If fullname is PRESENT, then do Signup
+      await axios
+        .post(signupEndpoint, {
+          fullName: values.fullname,
+          email: values.email,
+          password: values.password,
+        })
+        .then((response) => {
+          const token: string = response.data;
+          localStorage.setItem("jwt", token);
+          navigate("/courses");
+        })
+        .catch((err) => {
+          if (err.response.status === 409) {
+            setEmailExists(true);
+          }
+        });
+    }
   };
 
+  /*
+   * Google Login Method
+   */
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
         await axios
-          .post(`${BASE_URI}/api/v1/user/signin/google`, {
+          .post(userInfoFromGoogleUrl, {
             accessToken: tokenResponse.access_token,
           })
           .then((response) => {
@@ -100,6 +136,14 @@ const SignIn = ({ BASE_URI, logoPath }: BaseURI) => {
       }
     },
   });
+
+  /*
+   * Switch between login and signup form
+   */
+  const switchForm = () => {
+    if (isSignup) setIsSignup(false);
+    else setIsSignup(true);
+  };
 
   return (
     <div className="signin w-[350px] border-4 border-black flex flex-col p-10 bg-white">
@@ -136,7 +180,15 @@ const SignIn = ({ BASE_URI, logoPath }: BaseURI) => {
           e.preventDefault();
         }}
       >
+        {/*
+         * Input Fileds Fullname, Email and Password
+         */}
         {inputs.map((input: InputFields) => {
+          if (isSignup) {
+            if (input.name === "fullname") {
+              return;
+            }
+          }
           return (
             <input
               key={input.id}
@@ -147,22 +199,39 @@ const SignIn = ({ BASE_URI, logoPath }: BaseURI) => {
             />
           );
         })}
+
+        {/* Signin / Signup Button */}
         <button
           type="button"
-          onClick={signIn}
+          onClick={handleContinue}
           className="bg-yello border-yello w-full p-2"
         >
           Continue with Email
         </button>
       </form>
-      <div className="signup flex justify-center mt-2">
-        <p className="mr-1">Don't have an account?</p>
-        <a className="text-blue-700">Sign up</a>
+
+      {/* Form Switch Indicater */}
+      <div className="signup-signin flex justify-center mt-2">
+        <p className="mr-1">
+          {isSignup ? "Don't have an account?" : "Already Have an Account?"}
+        </p>
+        <a onClick={switchForm} className="text-blue-700 cursor-pointer">
+          {isSignup ? "Sign up" : "Sign in"}
+        </a>
       </div>
+
+      {/* Error to show when Email or User Already Exists */}
       {emailExists && (
         <div className="error mt-4">
           <p className="text-red-500 text-center">
             Email Already Exists! Please Login
+          </p>
+        </div>
+      )}
+      {noUserExists && (
+        <div className="error mt-4">
+          <p className="text-red-500 text-center">
+            User Does not exists! Please Signup
           </p>
         </div>
       )}

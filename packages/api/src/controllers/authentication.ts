@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 import path from "path";
-import { OAuth2Client } from 'google-auth-library';
 import axios from 'axios';
 
 dotenv.config({
@@ -21,9 +20,9 @@ const JWT_SECRET_KEY: string | undefined = process.env.JWT_SECRET_KEY;
 
 
 /*
- * User Signin using Form Input 
+ * User Signup using Form Input 
  */
-export async function userSignin(req: Request, res: Response) {
+export async function userSignup(req: Request, res: Response) {
     if (!req.body.fullName || !req.body.email || !req.body.password) {
       res.status(204).send("Fill all required fields");
     }
@@ -40,6 +39,40 @@ export async function userSignin(req: Request, res: Response) {
     const user: IUser = new User({ fullName, email, password: hashedPassword });
     await saveUserToDB(user, plain_password, res);
 }
+
+
+/*
+ * User Signin using Form Input 
+ */
+export async function userSignin(req: Request, res: Response) {
+    if (!req.body.email || !req.body.password) {
+      console.log("Fields: Email and Password are empty\nReturning...")
+      res.status(204).send("Email & Password required!");
+      return;
+    }
+    const { email, password } = req.body;
+    const plain_password: string = password;
+    const hashedPassword: string = hashPassword(plain_password);
+    
+    const existingUser: IUser | null = await checkIfUserAlreadyExists(email, res);
+    if (!existingUser) {
+      res.status(404).send(`No User with Email:${email} was found`);
+      return;
+    }
+    if (existingUser.password !== hashedPassword) {
+      res.status(404).send("Email or Password is incorrect");
+      return;
+    }
+    const user: IUser = new User({
+      fullName: existingUser.fullName,
+      email: existingUser.email
+    });
+    const jwt: string = generateJwt(user, plain_password, res);
+    res.status(200).send(jwt);
+}
+
+
+
 
 
 export async function userSigninWithGoogle(req: Request, res: Response) {
@@ -79,6 +112,8 @@ export async function userSigninWithGoogle(req: Request, res: Response) {
     console.error("error getting profile", error);
   }
 }
+
+
 
 
 

@@ -1,6 +1,7 @@
 type Course = {
-  id: string;
+  _id: string;
   title: string;
+  duration: number;
 };
 
 import Navbar from "../components/navbar";
@@ -36,7 +37,6 @@ const Courses = () => {
           })
           .then((result) => {
             setCourses(result.data);
-            console.log(result.data);
           });
       } catch (error) {
         throw new Error("Failed to fetch courses from server");
@@ -64,11 +64,11 @@ const Courses = () => {
         {courses.map((course) => {
           return (
             <div
-              key={course.id}
+              key={course._id}
               className="course-item flex items-center border-2 border-black w-full p-2 mb-2 bg-gray-300"
             >
               <FaDatabase className="text-2xl" />
-              <p className="ml-2">{course.title}</p>
+              <p className="ml-2">{`${course.title} (${course.duration}) hours`}</p>
             </div>
           );
         })}

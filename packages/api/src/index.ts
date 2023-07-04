@@ -1,10 +1,11 @@
 import path from 'path';
 import dotenv from 'dotenv';
-import express, {Express, NextFunction, Request, Response} from 'express';
+import express, {Express, Request, Response} from 'express';
 import cors from 'cors';
 import { router } from './routes/routes.js';
 import mongoose, { ConnectOptions, Mongoose } from 'mongoose';
 import morgan from 'morgan';
+import { preSeeding } from './seedData.js';
 
 dotenv.config({
   path: path.join(process.cwd(), "../../.env")
@@ -43,10 +44,11 @@ const RETRY_DELAY = 5000;
 const connectWithMongo = () => {
   if (MONGO_URI === undefined) throw new Error("MongoDB URI not found");
   mongoose.connect(MONGO_URI, { useNewUrlParser: true } as ConnectOptions)
-    .then(() => {
+    .then(async () => {
       mongooseInstance = mongoose;
       console.log('Connected to MongoDB');
       retryAttempts = 0;
+      await preSeeding();
     })
     .catch((err) => {
       console.error(`Failed to connect to MongoDB: ${err.error}`);
