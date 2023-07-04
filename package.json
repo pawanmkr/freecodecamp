@@ -4,11 +4,11 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "clean": "rm pnpm-lock.yaml && rm -rf node_modules && rm -rf packages/api/node_modules && rm -rf packages/api/dist && clear",
     "build-api": "pnpm --filter api build",
     "build-web": "pnpm --filter web build",
-    "build": "pnpm install && pnpm run build-api",  
+    "build": "pnpm run clean && pnpm install && pnpm run build-api",
     "build:dev": "pnpm run build && pnpm --filter api dev",
-    "clean": "rm pnpm-lock.yaml && rm -rf node_modules && rm -rf packages/api/node_modules && rm -rf packages/api/dist && clear",
     "dev": "pnpm --filter api dev",
     "watch": "pnpm --filter api watch",
     "prod": "pnpm --filter api prod"
