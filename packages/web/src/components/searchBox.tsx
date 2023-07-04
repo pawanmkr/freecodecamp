@@ -9,7 +9,7 @@ const SearchBox = () => {
   return (
     <div>
       <input
-        className="opacity-50"
+        className="opacity-50 px-2 w-[300px] ml-2"
         type="text"
         placeholder="Search 8000+ tutorials"
         onChange={handleChange}

@@ -1,6 +1,12 @@
 import { Router } from 'express';
-import { userSignin } from '../controllers/index.js'
+import { 
+  userSignin, 
+  userSigninWithGoogle, 
+  getCourses 
+} from '../controllers/index.js'
 
 export const router = Router();
 
 router.post("/user/signin", userSignin);
+router.post("/user/signin/google", userSigninWithGoogle);
+router.get("/courses", getCourses);

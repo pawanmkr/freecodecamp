@@ -8,7 +8,8 @@ export const theme = {
       'dark-blue': '#0A0A23',
       'bgblue': '#1B1B32',
       'yite': '#F5F6F7',
-      'yello': '#FFC143'
+      'yello': '#FFC143',
+      'yellobd': '#FEAC32'
     },
   },
 };
