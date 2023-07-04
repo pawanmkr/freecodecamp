@@ -8,9 +8,14 @@ let count: number = 0;
 export async function healthCheck(url: string) {
   console.log(count++);
   setTimeout(() => {
-    fetch(url).then(() => {
-      healthCheck(url);
-    });
-  }, 5000);
+    fetch(url)
+      .then(() => {
+        healthCheck(url);
+      })
+      .catch((err) => {
+        console.log(err);
+        process.exit(1);
+      });
+  }, 1000);
 }
 // https://fcc-lol8.onrender.com/health

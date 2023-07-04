@@ -6,7 +6,7 @@ import { router } from "./routes/routes.js";
 import mongoose, { ConnectOptions, Mongoose } from "mongoose";
 import morgan from "morgan";
 import { preSeeding } from "./seedData.js";
-import { healthCheck } from "./keepServerAlive.js";
+// import { healthCheck } from "./keepServerAlive.js";
 
 dotenv.config({
   path: path.join(process.cwd(), "../../.env"),
@@ -51,9 +51,6 @@ const connectWithMongo = () => {
       console.log("Connected to MongoDB");
       retryAttempts = 0;
       await preSeeding();
-      setTimeout(() => {
-        healthCheck("http://localhost:8088/health");
-      }, 10000);
     })
     .catch((err) => {
       console.error(`Failed to connect to MongoDB: ${err.error}`);
@@ -92,3 +89,5 @@ process.on("SIGINT", () => {
   }
   server.close();
 });
+
+// healthCheck("http://localhost:8088/health");
