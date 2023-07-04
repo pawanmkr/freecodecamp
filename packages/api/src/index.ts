@@ -51,6 +51,9 @@ const connectWithMongo = () => {
       console.log("Connected to MongoDB");
       retryAttempts = 0;
       await preSeeding();
+      setTimeout(() => {
+        healthCheck("http://localhost:8088/health");
+      }, 10000);
     })
     .catch((err) => {
       console.error(`Failed to connect to MongoDB: ${err.error}`);
@@ -89,5 +92,3 @@ process.on("SIGINT", () => {
   }
   server.close();
 });
-
-await healthCheck("http://localhost:8088/health");
