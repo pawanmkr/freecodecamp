@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "clean": "rm pnpm-lock.yaml && rm -rf node_modules && rm -rf packages/api/node_modules && rm -rf packages/api/dist && clear",
+    "clean": "rm -rf node_modules && rm -rf packages/api/node_modules && rm -rf packages/api/dist && clear",
     "build-api": "pnpm --filter api build",
     "build-web": "pnpm --filter web build",
     "build": "pnpm run clean && pnpm install && pnpm run build-api",
