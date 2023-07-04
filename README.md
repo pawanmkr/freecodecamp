@@ -10,6 +10,7 @@
 ### Tech Used
 
 - Node.js
+- Express.js
 - Typescript
 - React.js
 - MongoDB
