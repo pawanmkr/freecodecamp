@@ -3,8 +3,6 @@ import Navbar from "../components/navbar";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  console.log(import.meta.env.VITE_BASE_URI);
-
   const navigate = useNavigate();
   const jwt: string | null = localStorage.getItem("jwt");
   useEffect(() => {

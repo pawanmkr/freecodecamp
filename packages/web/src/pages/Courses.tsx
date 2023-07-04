@@ -10,8 +10,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const BASE_URI: string = import.meta.env.VITE_BASE_URI;
-
 const Courses = () => {
   const navigate = useNavigate();
   const [courses, setCourses] = useState<Course[]>([]);
@@ -30,7 +28,7 @@ const Courses = () => {
     const fetchCourses = async () => {
       try {
         axios
-          .get(`${BASE_URI}/api/v1/courses`, {
+          .get(`${import.meta.env.VITE_BASE_URI}/api/v1/courses`, {
             headers: {
               Authorization: `Bearer ${jwt}`,
             },
